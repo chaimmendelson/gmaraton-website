@@ -1,0 +1,24 @@
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+
+#login{
+    width: fit-content;
+}
+
+#showPassword{
+    border:1px solid black;
+    border-radius: 50%;
+    background-color: transparent;
+}
+.dropdown {
+    width: 100%;
+    height: 100%;
+    border: 1px solid black;
+    border-radius: 5px;
+    background-color: transparent;
+}
