@@ -28,12 +28,14 @@ def is_valid_user(request: web.Request):
 
 async def game_page(request: web.Request):
     """Serve the client-side application."""
+    print(request)
     if is_valid_user(request):
         with open('pages/client.html') as f:
             return web.Response(text=f.read(), content_type='text/html')
     return web.Response(status=302, headers={'Location': '/login'})
 
 async def login(request: web.Request):
+    print(request)
     """Serve the client-side application."""
     with open('pages/login.html') as f:
         return web.Response(text=f.read(), content_type='text/html')
@@ -53,6 +55,7 @@ async def check_data(request: web.Request):
     return True
 
 async def update(request: web.Request):
+    print(request)
     if not is_valid_user(request):
         return web.json_response({'status': 'error'})
     if not await check_data(request):
@@ -86,6 +89,7 @@ async def data(request: web.Request):
 
 
 async def login_validation(request: web.Request):
+    print(request)
     headers = request.headers
     if request.body_exists:
         data = await request.json()
