@@ -112,4 +112,4 @@ app.add_routes([web.get('/', game_page),
                 web.static('/images', 'images')])
 
 if __name__ == '__main__':
-    web.run_app(app, port=8000)
+    web.run_app(app, port=5678)
