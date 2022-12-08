@@ -2,11 +2,11 @@ import psycopg2 as pg2
 from psycopg2 import extensions as pg2es
 import json
 import get_students
-from os import uname
+from platform import uname
 
 
 if uname().system == 'Windows':
-        DB_CONN = pg2.connect(database='chess_users', user='postgres', password=132005)
+        DB_CONN = pg2.connect(database='gmaraton', user='postgres', password=132005)
 else:
     connect_str = "dbname='chess_users' user='lasker' host='localhost' password='132005'"
     DB_CONN = pg2.connect(connect_str)
