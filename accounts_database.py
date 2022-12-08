@@ -1,7 +1,15 @@
 import psycopg2 as pg2
 from psycopg2 import extensions as pg2es
+import json
+import get_students
+from os import uname
 
-DB_CONN = pg2.connect(database='gmaraton', user='postgres', password=132005)
+
+if uname().system == 'Windows':
+        DB_CONN = pg2.connect(database='chess_users', user='postgres', password=132005)
+else:
+    connect_str = "dbname='chess_users' user='lasker' host='localhost' password='132005'"
+    DB_CONN = pg2.connect(connect_str)
 DB_CONN.autocommit = True
 
 NINE = 'nine'
@@ -24,7 +32,7 @@ C_CONSTRAINS = 'constrains'
 
 COLUMNS = {
     CLASS:   {C_TYPE: 'decimal', C_LEN: None, C_CONSTRAINS: 'not null'},
-    NAME:    {C_TYPE: 'varchar', C_LEN: 20, C_CONSTRAINS: 'not null'},
+    NAME:    {C_TYPE: 'varchar', C_LEN: 50, C_CONSTRAINS: 'not null'},
     TEST1:   {C_TYPE: 'decimal', C_LEN: None, C_CONSTRAINS: 'not null'},
     TEST2:   {C_TYPE: 'decimal', C_LEN: None, C_CONSTRAINS: 'not null'},
     TEST3:   {C_TYPE: 'decimal', C_LEN: None, C_CONSTRAINS: 'not null'},
@@ -33,20 +41,21 @@ COLUMNS = {
 
 COLUMNS_L = list(COLUMNS)
 TESTS = [TEST1, TEST2, TEST3]
+BONUSES = [BONUS]
 
 def check_data(table, class_num=None, name=None, column=None, value=None):
     if table not in TABLES_NAMES:
         print("Table does not exist")
         return False
     if class_num:
-        if not isinstance(class_num, int):
+        if not class_num.isnumeric():
             print("class_num must be an integer")
             return False
-        if class_num > get_class_count(table) or class_num < 1:
-            print("class_num invalid")
+        if int(class_num) not in get_class_list(table):
+            print("class_num invalid (not in class list)")
             return False
         if name:
-            if name not in get_class_names(table, class_num, TEST1):
+            if name not in get_class_names(table, class_num):
                 print("name invalid")
                 return False
             if column:
@@ -64,8 +73,11 @@ def check_data(table, class_num=None, name=None, column=None, value=None):
                                 print("value is too long")
                                 return False
                     elif type == 'decimal':
-                        if not isinstance(value, int):
+                        if not value.isnumeric():
                             print("value must be an integer")
+                            return False
+                        if int(value) > 100:
+                            print("value must be equal or less than 100")
                             return False
     return True
 
@@ -111,7 +123,9 @@ def reset_tables()->None:
 
 def insert_new_user(table, class_num, name):
     student = [class_num, name]
-    for column in TESTS + [BONUS]:
+    for column in TESTS:
+        student.append('0')
+    for column in BONUSES:
         student.append('0')
     execute(f"insert into {table}({', '.join(list(COLUMNS))}) values({', '.join(student)});").close()
 
@@ -200,19 +214,20 @@ def get_best_student():
     return best_student
 
 
-def set_class():
-    names = ["Jacob", "Michael", "Matthew", "Joshua", "Christopher", "Nicholas", "Andrew", "Joseph", "Daniel", "Tyler", "William", "Brandon", "Ryan", "John", "Zachary", "David", "Anthony", "James", "Justin", "Alexander", "Jonathan", "Christian", "Austin", "Dylan", "Ethan", "Benjamin", "Noah", "Samuel", "Robert", "Nathan", "Cameron", "Kevin"]
-    for name in names:
+def load_database():
+    translate = {'ט': NINE, 'י': TEN, 'יא': ELEVEN, 'יב': TWELVE}
+    students = get_students.load_students()
+    if not isinstance(students, list):
+        return False
+    for student in students:
+        table = translate[student['grade']]
+        name = student['name'].replace("'", "")
         name = f"'{name}'"
-        insert_new_user(NINE, '1', name)
-
-
+        insert_new_user(table, student['class_num'], name)
+    
 def main():
-    # reset_tables()
-    # set_class()
-    update_grade(NINE, '1', 'Jacob', TEST1, '100')
-    print(get_class_list(NINE))
-    print(get_class_names(NINE, 1, TEST1))
+    reset_tables()
+    load_database()
 
 
 if __name__ == '__main__':

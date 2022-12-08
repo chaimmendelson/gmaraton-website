@@ -4,21 +4,36 @@
     margin-right: auto;
 }
 
-
-
-#login{
-    width: fit-content;
+body {
+    background-color: pink;
 }
 
-#showPassword{
-    border:1px solid black;
-    border-radius: 50%;
-    background-color: transparent;
-}
 .dropdown {
     width: 100%;
-    height: 100%;
-    border: 1px solid black;
     border-radius: 5px;
     background-color: transparent;
 }
+
+
+.form-d{
+    width: 100%;
+    border-radius: 5px;
+}
+
+.dd-style{
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 80px;
+}
+
+#submit-btn:hover{
+    background-color: #4CAF50;
+    color: white;
+    cursor: grab;
+}
+#submit-btn:focus{
+    background-color: #3b8a3d;
+    color: white;
+    cursor: grabbing;
+}
+

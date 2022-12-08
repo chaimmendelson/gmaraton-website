@@ -3,13 +3,9 @@ import secrets
 import accounts_database as db
 app = web.Application()
 COOKIES = []
-TESTS_COOKIES = []
-BONUS_COOKIES = []
     
 COOKIE_NAME = 'gmaraton-cookie'
-MASTER_EMAILS = ['chaimke2005@gmail.com']
-TESTS_EMAILS = []
-BONUS_EMAILS = []
+EMAILS = ['chaimke2005@gmail.com']
 
 def does_cookie_exist(cookie):
     return cookie in COOKIES
@@ -19,13 +15,6 @@ def create_cookie(email):
     while does_cookie_exist(cookie):
         cookie = secrets.token_hex(16)
     COOKIES.append(cookie)
-    if email in MASTER_EMAILS + TESTS_EMAILS:
-        TESTS_COOKIES.append(cookie)
-    if email in MASTER_EMAILS + BONUS_EMAILS:
-        BONUS_COOKIES.append(cookie)
-    else:
-        BONUS_COOKIES.append(cookie)
-        TESTS_COOKIES.append(cookie)
     return cookie
 
 
@@ -36,13 +25,6 @@ def is_valid_user(request: web.Request):
         return does_cookie_exist(cookie)
     return False
 
-def check_permision(request: web.Request, permision):
-    cookie = request.cookies[COOKIE_NAME]
-    if permision == 'tests':
-        return cookie in TESTS_COOKIES
-    if permision == 'bonus':
-        return cookie in BONUS_COOKIES
-    return False
 
 async def game_page(request: web.Request):
     """Serve the client-side application."""
@@ -58,7 +40,7 @@ async def login(request: web.Request):
 
 
 async def check_data(request: web.Request):
-    if not request.has_body:
+    if not request.can_read_body:
         return False
     data = await request.json()
     if not data:
@@ -75,14 +57,11 @@ async def update(request: web.Request):
         return web.json_response({'status': 'error'})
     if not await check_data(request):
         return web.json_response({'status': 'error'})
+    data = await request.json()
     if data['column'] == db.BONUS:
-        if not check_permision(request, 'bonus'):
-            return web.json_response({'status': 'error'})
-        db.update_bonus(data['grade'], data['class'], data['name'], data['value'])
+        db.update_bonus(data['grade'], int(data['class']), data['name'], int(data['value']))
     else:
-        if not check_permision(request, 'tests'):
-            return web.json_response({'status': 'error'})
-        db.update_grade(data['grade'], data['class'], data['name'], data['column'], data['value'])
+        db.update_grade(data['grade'], int(data['class']), data['name'], data['column'], int(data['value']))
     print(f"{data['name']} grade in {data['column']} was updated to {data['value']}")
     return web.json_response({'status': 'ok'})
 
@@ -93,7 +72,7 @@ async def data(request: web.Request):
         return web.json_response({'status': 'error'})
     
     # Default is to give grades list and tests list
-    if not request.has_body:
+    if not request.can_read_body:
         grades = {}
         for grade in db.TABLES_NAMES:
             class_list = db.get_class_list(grade)
@@ -101,7 +80,7 @@ async def data(request: web.Request):
             for class_num in class_list:
                 class_dict[class_num] = db.get_class_names(grade, class_num)
             grades[grade] = class_dict
-        return web.json_response({'status': 'ok', 'grades': grades, 'tests': db.TESTS})
+        return web.json_response({'status': 'ok', 'grades': grades, 'tests': db.TESTS + [db.BONUS]})
     
     data = await request.json()
 
@@ -111,8 +90,7 @@ async def login_validation(request: web.Request):
     if request.body_exists:
         data = await request.json()
         if 'username' in data and 'password' in data:
-            emails = MASTER_EMAILS + TESTS_EMAILS + BONUS_EMAILS
-            if data['username'] in emails and data['password'] == 'gmaraton' or\
+            if data['username'] in EMAILS and data['password'] == 'gmaraton' or\
             data['username'] == 'test' and data['password'] == 'test':
                 cookie = create_cookie(data['username'])
                 response = web.json_response({'status': 'ok'})

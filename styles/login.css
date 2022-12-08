@@ -4,3 +4,13 @@
     margin-right:auto;
     width:fit-content;
 }
+
+#login{
+    width: fit-content;
+}
+
+#showPassword{
+    border:1px solid black;
+    border-radius: 50%;
+    background-color: transparent;
+}

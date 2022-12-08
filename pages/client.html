@@ -4,6 +4,7 @@
     <title>Chess</title>
     
     <!-- CSS -->
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles/client.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     
@@ -12,19 +13,21 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   </head>
   <body>
-    <div class="dropdowns">
-      <select id="grades-dd" class="dropdown">
+    <form id="data-form">
+      <div class="dd-style">
+        <select id="tests-dd" class="dropdown" required></select>
+      </div>
+      <div class="dd-style">
+        <select id="students-dd" class="dropdown" required></select>
+      </div>
+      <div class="dd-style">
+        <input type="number" min=0 max=100 id="score-input" value="" class="form-d" placeholder="Enter Score" required>
+      </div>
+      <div class="dd-style">
+        <input type="submit" class="form-d" id="submit-btn">
+      </div>
+    </form>
 
-      </select>
-
-      <select id="classes-dd" class="dropdown">
-
-      </select>
-
-      <select id="students-dd" class="dropdown">
-
-      </select>
-    </div>
     <script src="scripts/client.js"></script>
   </body>
 </html>
