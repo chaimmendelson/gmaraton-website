@@ -1,13 +1,13 @@
 //format should be: {'grade': 'nine', 'class': 1, 'name': 'chaim', 'column': 'test1', 'value': 100}
-async function updateStudentGrade(grade, classNum, name, bonus, value){
-    student = {grade: grade, class: classNum, name: name, column: bonus, value: value}
-    const response  = await fetch('/update', {
+async function update(grade, classNum, column, value){
+    data = {grade: grade, class: classNum, column: column, value: value}
+    const response  = await fetch('/admin_update', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(student),
+        body: JSON.stringify(data),
     });
     data = await response.json();
     console.log(data['status']);
@@ -32,7 +32,6 @@ async function get_data(){
 
     // Send request
     data = await response.json();
-    
     // Check for errors
     if (data['status'] == 'error')
         return null;
@@ -41,7 +40,9 @@ async function get_data(){
     return {
         grades: data['grades'],
         tests: data['tests'],
-        bonus: data['bonusses'],
+        bonusses: data['bonusses'],
+        competition : data['competition'],
+        attendence : data['attendence'],
     };
 }
 
@@ -50,9 +51,7 @@ function searchList(grades) {
     sl = []
     for(grade in grades){
         for(classNum in grades[grade]){
-            for(student in grades[grade][classNum]){
-                sl.push(`${translate[grade]}${classNum} ${grades[grade][classNum][student][0]}`)
-            }
+            sl.push(`${translate[grade]}${classNum}`)
         }
     }
     return sl;
@@ -83,14 +82,12 @@ function table_list(grades, tests, bonusses){
     }
     return tl;
 }
-function reverseTranslate(student){
+function reverseTranslate(grade_and_class){
     translate = {'ט': 'nine', 'י': 'ten', 'יא': 'eleven', 'יב': 'twelve'}
     //grade and class are in the same string and are first and then the name
-    grade_and_class = student.split(' ')[0];
-    studentName = student.split(' ').slice(1).join(' ');
     classNum = grade_and_class.substring(grade_and_class.length - 1);
     grade = translate[grade_and_class.substring(0, grade_and_class.length - 1)];
-    return [grade, classNum, studentName];
+    return [grade, classNum];
 }
 
 
@@ -131,6 +128,145 @@ async function reloadTable(){
 
 $('#relode').click(reloadTable);
 
+function setupDropdown(dropdownID) {
+    // Get the dropdown
+    const dropdown = $(`#${dropdownID}`);
+
+    // We need one empty option in order to show the placeholder
+    dropdown.append('<option>');
+
+    // Make it a select2 dropdown
+    dropdown.select2({placeholder: 'No option selected'});
+}
+
+function fillDropdown(dropdownID, data, showSearch, placeholder, onselect) {
+    // Get the dropdown
+    const dropdown = $(`#${dropdownID}`);
+    
+    // Clear leftovers
+    clearDropdown(dropdownID)
+
+    // Fill the dropdown
+    dropdown.select2({
+        data: data,
+        minimumResultsForSearch: (showSearch ? 0 : -1),
+        placeholder: placeholder,
+        allowClear: true
+    });
+
+    // onselect
+    dropdown.on('select2:select', (e) => {
+        onselect(e.params.data.id);
+    });
+
+    // Auto focus on search field when dropdown is opened
+    if (showSearch) {
+        dropdown.on('select2:open', () => {
+            document.querySelector('.select2-search__field').focus();
+        });
+    }
+};
+
+function clearDropdown(dropdownID) {
+    // Get the dropdown
+    const dropdown = $(`#${dropdownID}`);
+
+    // Clear the dropdown, and re-add the empty option to show placeholder
+    dropdown.empty();
+    dropdown.append('<option>');
+}
+
+$('#submit-daily-btn').click((e) => {
+    e.preventDefault(); // Do not reload
+    const form = $('#daily-form')[0];
+    if (!form.checkValidity()) {// Validate form
+        form.reportValidity();
+        return;
+    }
+    
+    // Get the values
+    const grade_and_class = $('#daily-classes').val();
+    const attendence = $('#daily-key').val();
+    const score = $('#daily-value-input').val();
+    data = reverseTranslate(grade_and_class);
+    const grade = data[0];
+    const classNum = data[1];
+    // Update the student's grade
+    update(grade, classNum, attendence, score);
+    // clear students dropdown choice
+    $('#daily-classes').val(null).trigger('change');
+    // Reset score-input
+    $('#daily-value-input').val('');
+});
+
+
+$('#submit-cmp-btn').click((e) => {
+    e.preventDefault(); // Do not reload
+    const form = $('#comp-form')[0];
+    if (!form.checkValidity()) {// Validate form
+        form.reportValidity();
+        return;
+    }
+    
+    // Get the values
+    translate = {'ט': 'nine', 'י': 'ten', 'יא': 'eleven', 'יב': 'twelve'}
+    const grade = translate[$('#comp-grade').val()];
+    const score = $('#comp-value-input').val();
+    // Update the student's grade
+    update(grade, 0, 'competition', score);
+    // clear students dropdown choice
+    $('#comp-grade').val(null).trigger('change');
+    // Reset score-input
+    $('#comp-value-input').val('');
+});
+
+
+$('#daily-btn').click((e) => {
+    e.preventDefault(); // Do not reload
+    $('#comp-data').hide();
+    $('#daily-data').show();
+});
+
+$('#comp-btn').click((e) => {
+    e.preventDefault(); // Do not reload
+    $('#daily-data').hide();
+    $('#comp-data').show();
+});
+
+
 window.onload = async () => {
     reloadTable();
-}
+    translate = {'nine': 'ט', 'ten': 'י', 'eleven': 'יא', 'twelve': 'יב'}
+    const data = await get_data();
+    const grades = data.grades;
+    const attendence = data.attendence;
+    let comp_grades = [];
+    let grades_list = Object.keys(grades);
+    for (let grade in grades_list) {
+        comp_grades.push(translate[grades_list[grade]]);
+    }
+
+    // Tests dropdown
+    setupDropdown('daily-key');
+    fillDropdown('daily-key', attendence, false, 'select day', day => {
+        console.log(`Selected day ${day}`);
+    });
+    
+    setupDropdown('daily-classse');
+    fillDropdown('daily-classes', searchList(grades), true, 'select class', classNum => {
+        console.log(`Selected class ${classNum}`);
+        
+        // Reset score-input
+        $('#daily-value-input').val('');
+    });
+    
+    setupDropdown('comp-grades');
+    fillDropdown('comp-grades', comp_grades, false, 'select grade', grade => {
+        console.log(`Selected ${grade}`);
+        
+        // Reset score-input
+        $('#comp-value-input').val('');
+    });
+
+    // Hide daily bonus
+    $('#comp-data').hide();}

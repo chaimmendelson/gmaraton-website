@@ -8,47 +8,13 @@ body {
     background-color: pink;
 }
 
-.dropdown {
-    width: 100%;
-    border-radius: 5px;
-    background-color: transparent;
-}
-
-
-.form-d{
-    width: 100%;
-    border-radius: 5px;
-}
-
-.dd-style{
-    margin: auto;
-    width: 80%;
-    margin-top: 5px;
-}
-
-#submit-btn:hover{
-    background-color: #4CAF50;
-    color: white;
-    cursor: grab;
-}
-#submit-btn:focus{
-    background-color: #3b8a3d;
-    color: white;
-    cursor: grabbing;
-}
-
-#bonus-form{
-    width: 25%;
-    border: black solid 1px;
-    padding: 5px;
-}
-
 #school-table-div{
     width: fit-content;
     margin: auto;
     border: black solid 1px;
     max-height: 400px;
     overflow-y: scroll;
+    float: left;
 }
 
 th {
@@ -61,4 +27,42 @@ th {
 td{
     border-left: black solid 1px;
     text-align: center;
+}
+
+.dropdown {
+    width: 100%;
+    border-radius: 5px;
+    background-color: transparent;
+}
+
+
+.form-d{
+    width: 100%;
+    border-radius: 5px;
+}
+
+.submit-btn{
+    width: 100%;
+    border-radius: 5px;
+}
+.dd-style{
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 80px;
+}
+
+.submit-btn:hover{
+    background-color: #4CAF50;
+    color: white;
+    cursor: grab;
+}
+.submit-btn:focus{
+    background-color: #3b8a3d;
+    color: white;
+    cursor: grabbing;
+}
+
+.input-form{
+    width: 50%;
+    float: right;
 }

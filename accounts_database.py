@@ -31,6 +31,11 @@ BONUS1 = 'bonus1'
 BONUS2 = 'bonus2'
 BONUS3 = 'bonus3'
 
+ATTEND1 = 'attend1'
+ATTEND2 = 'attend2'
+ATTEND3 = 'attend3'
+COMPETITION = 'competition'
+
 BONUS_SUBJECT = 'bonus_subject'
 
 
@@ -52,6 +57,7 @@ COLUMNS = {
 COLUMNS_L = list(COLUMNS)
 TESTS = [TEST1, TEST2, TEST3]
 BONUSES = [BONUS1, BONUS2, BONUS3]
+ATTENDS = [ATTEND1, ATTEND2, ATTEND3]
 
 def check_data(table, class_num=None, name=None, column=None, value=None):
     if table not in TABLES_NAMES:
@@ -173,11 +179,6 @@ def get_class_test_avg(table, class_num, test):
     test_sum = execute(f"select sum({test}) from {table} where {CLASS} = {class_num};").fetchone()[0]
     return round(test_sum / get_student_amount(table, class_num))
 
-def get_attendence(table, class_num, day):
-    return 40 # temperary
-
-def get_formal_test_score(table, class_num):
-    return 80 # temperary
 
 def get_class_score(table, class_num):
     sum = 0
@@ -185,9 +186,8 @@ def get_class_score(table, class_num):
         sum += get_class_test_avg(table, class_num, test) * TEST_C * 0.28
     for bonus in BONUSES:
         sum += get_class_test_avg(table, class_num, bonus) * 10 * BONUS_C * 0.28
-    for day in range(3):   
+    for day in ATTENDS:   
         sum += get_attendence(table, class_num, day) * ATTENDENCE_C * 0.28
-    sum += get_formal_test_score(table, class_num) * 0.16
     return sum
 
 
@@ -206,33 +206,6 @@ def get_grade_score(table):
     for i in range(class_amount):
         sum += get_class_score(table, i + 1)
     return round(sum / class_amount)
-
-def get_best_student_in_class(table, class_num)->list:
-    cursor = execute(f"select {NAME} from {table}\
-                        where {CLASS} = {class_num}\
-                        order by {' + '.join(TESTS + BONUSES)} desc;")
-    data = cursor.fetchone()
-    cursor.close()
-    return [data[0], int(data[1] + data[2] + data[3] + data[4])]
-
-
-def get_best_student_in_grade(table)->list:
-    class_amount = get_class_count(table)
-    best_student = ['', 0]
-    for i in range(class_amount):
-        student = get_best_student_in_class(table, i + 1)
-        if best_student[1] < student[1]:
-            best_student = student
-    return best_student
-
-
-def get_best_student():
-    best_student = ['', 0]
-    for table in TABLES_NAMES:
-        student = get_best_student_in_grade(table)
-        if best_student[1] < student[1]:
-            best_student = student
-    return best_student
 
 
 def load_database():
@@ -272,8 +245,46 @@ def get_school_table():
     return data
 
 
+def set_additional_grading():
+    dictionary = {}
+    for table in TABLES_NAMES:
+        dictionary[table] = {COMPETITION : 0}
+        for class_num in get_class_numbers_list(table):
+            dictionary[table][class_num] = {ATTEND1 : 0, ATTEND2 : 0, ATTEND3 : 0}
+    with open("additional_grades.json", "w") as outfile:
+        json.dump(dictionary, outfile)
+
+
+def set_attendents(table, class_num, day, attendents):
+    with open("additional_grades.json", "r") as infile:
+        dictionary = json.load(infile)
+    dictionary[table][str(class_num)][day] = attendents
+    with open("additional_grades.json", "w") as outfile:
+        json.dump(dictionary, outfile)
+
+
+def get_attendence(table, class_num, day):
+    with open("additional_grades.json", "r") as infile:
+        dictionary = json.load(infile)
+    return dictionary[table][str(class_num)][day]
+
+
+def get_competition(table):
+    with open("additional_grades.json", "r") as infile:
+        dictionary = json.load(infile)
+    return dictionary[table][COMPETITION]
+
+def set_competition(table, new_value):
+    with open("additional_grades.json", "r") as infile:
+        dictionary = json.load(infile)
+    dictionary[table][COMPETITION] = new_value
+    with open("additional_grades.json", "w") as outfile:
+        json.dump(dictionary, outfile)
+
+        
 def main():
-    reset_tables()
-    print(get_class_score(NINE, 1))
+    #reset_tables()
+    set_additional_grading()
+    set_attendents(NINE, 1, ATTEND1, 40)
 if __name__ == '__main__':
     main()
