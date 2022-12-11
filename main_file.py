@@ -8,9 +8,18 @@ while True:
 
     # Check the output of the git pull command to see if there were any changes
     output = result.stdout.decode().strip()
+    print(output)
     if "Already up to date." not in output:
-        # Kill any previous run of the script
-        subprocess.run(["pkill", "-f", "python3 /home/elchairoy/gmaraton-website/server.py"])
+        ps = subprocess.run(["ps", "-ef"], stdout=subprocess.PIPE)
+        pid = None
+        for line in ps.stdout.decode().strip().split("\n"):
+            if "python3 /home/elchairoy/gmaraton-website/server.py" in line:
+                pid = int(line.split()[1])
+                break
+
+        if pid is not None:
+            # Kill the previous run of the script
+            subprocess.run(["kill", str(pid)])
 
         # Run the script
         subprocess.run(["python3", "/home/elchairoy/gmaraton-website/server.py"])
