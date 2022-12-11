@@ -15,11 +15,11 @@ while True:
         for line in ps.stdout.decode().strip().split("\n"):
             if "python3 /home/elchairoy/gmaraton-website/server.py" in line:
                 pid = int(line.split()[1])
-                print(pid, "is the pid")
                 break
-
+        print(pid, "is the pid")
         if pid is not None:
             # Kill the previous run of the script
+            print("Killing previous process")
             subprocess.run(["kill", str(pid)])
 
         # Run the script
