@@ -2,6 +2,7 @@ import subprocess
 import time
 
 subprocess.run(["python3", "/home/elchairoy/gmaraton-website/server.py"])
+print("Server started")
 while True:
     print("Checking for updates...")
     # Pull the latest code from the repository
