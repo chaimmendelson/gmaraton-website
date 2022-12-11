@@ -13,7 +13,7 @@ while True:
         ps = subprocess.run(["ps", "-ef"], stdout=subprocess.PIPE)
         pid = None
         for line in ps.stdout.decode().strip().split("\n"):
-            if "python3 /home/elchairoy/gmaraton-website/server.py" in line:
+            if "python3 server.py" in line:
                 pid = int(line.split()[1])
                 break
         print(pid, "is the pid")
@@ -23,5 +23,5 @@ while True:
             subprocess.run(["kill", str(pid)])
 
         # Run the script
-        subprocess.run(["python3", "/home/elchairoy/gmaraton-website/server.py"])
+        subprocess.run(["python3", "server.py"])
     time.sleep(10)
