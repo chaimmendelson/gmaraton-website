@@ -1,6 +1,7 @@
 import subprocess
 import time
 
+subprocess.run(["python3", "server.py"])
 while True:
     print("Checking for updates...")
     # Pull the latest code from the repository
