@@ -149,10 +149,6 @@ async def login_validation(request: web.Request):
                 response = web.json_response({'status': 'ok'})
                 response.set_cookie(COOKIE_NAME, cookie)
                 return response
-            if data['username'] == 'test' and data['password'] == 'test':
-                response = web.json_response({'status': 'ok'})
-                response.set_cookie(ADMIN_COOKIE_NAME, ADMIN_COOKIE)
-                return response
     return web.json_response({'status': 'error'})
 
 
