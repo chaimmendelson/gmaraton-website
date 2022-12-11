@@ -3,6 +3,7 @@ import time
 
 subprocess.run(["python3", "/home/elchairoy/gmaraton-website/server.py"])
 while True:
+    print("Checking for updates...")
     # Pull the latest code from the repository
     result = subprocess.run(["git", "pull"], cwd="/home/elchairoy/gmaraton-website", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
@@ -15,6 +16,7 @@ while True:
         for line in ps.stdout.decode().strip().split("\n"):
             if "python3 /home/elchairoy/gmaraton-website/server.py" in line:
                 pid = int(line.split()[1])
+                print(pid)
                 break
 
         if pid is not None:
