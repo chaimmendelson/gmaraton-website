@@ -129,6 +129,7 @@ def drop_tables()->None:
 def reset_tables()->None:
     drop_tables()
     create_tables()
+    load_database()
 
 
 def insert_new_user(table, class_num, name):
@@ -273,7 +274,6 @@ def get_school_table():
 
 def main():
     reset_tables()
-    load_database()
     print(get_class_score(NINE, 1))
 if __name__ == '__main__':
     main()

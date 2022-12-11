@@ -1,6 +1,7 @@
 import subprocess
 import time
 
+subprocess.run(["python3", "/home/elchairoy/gmaraton-website/server.py"])
 while True:
     # Pull the latest code from the repository
     result = subprocess.run(["git", "pull"], cwd="/home/elchairoy/gmaraton-website", stdout=subprocess.PIPE, stderr=subprocess.PIPE)
