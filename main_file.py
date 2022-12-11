@@ -15,7 +15,7 @@ while True:
         for line in ps.stdout.decode().strip().split("\n"):
             if "python3 /home/elchairoy/gmaraton-website/server.py" in line:
                 pid = int(line.split()[1])
-                print(pid)
+                print(pid, "is the pid")
                 break
 
         if pid is not None:
