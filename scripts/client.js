@@ -41,6 +41,7 @@ async function get_data(){
     return {
         grades: data['grades'],
         tests: data['tests'],
+        bonusses: data['bonusses'],
     };
 }
 
@@ -50,7 +51,8 @@ function searchList(grades) {
     for(grade in grades){
         for(classNum in grades[grade]){
             for(student in grades[grade][classNum]){
-                sl.push(`${translate[grade]}${classNum} ${grades[grade][classNum][student]}`)
+                s = `${translate[grade]}${classNum} ${grades[grade][classNum][student]}`
+                sl.push(s)
             }
         }
     }
@@ -115,18 +117,18 @@ function clearDropdown(dropdownID) {
     dropdown.append('<option>');
 }
 
-$('#submit-btn').click((e) => {
+$('#test-submit-btn').click((e) => {
     e.preventDefault(); // Do not reload
-    const form = $('#data-form')[0];
+    const form = $('#test-form')[0];
     if (!form.checkValidity()) {// Validate form
         form.reportValidity();
         return;
     }
     
     // Get the values
-    const student = $('#students-dd').val();
+    const student = $('#students-test-dd').val();
     const test = $('#tests-dd').val();
-    const score = $('#score-input').val();
+    const score = $('#test-score-input').val();
     student_data = reverseTranslate(student);
     const grade = student_data[0];
     const classNum = student_data[1];
@@ -134,27 +136,82 @@ $('#submit-btn').click((e) => {
     // Update the student's grade
     updateStudentGrade(grade, classNum, studentName, test, score);
     // clear students dropdown choice
-    $('#students-dd').val(null).trigger('change');
+    $('#students-test-dd').val(null).trigger('change');
     // Reset score-input
-    $('#score-input').val('');
+    $('#test-score-input').val('');
 });
+
+
+$('#bonus-submit-btn').click((e) => {
+    e.preventDefault(); // Do not reload
+    const form = $('#bonus-form')[0];
+    if (!form.checkValidity()) {// Validate form
+        form.reportValidity();
+        return;
+    }
+    
+    // Get the values
+    const student = $('#students-bonus-dd').val();
+    const test = $('#bonus-dd').val();
+    const score = $('#bonus-score-input').val();
+    student_data = reverseTranslate(student);
+    const grade = student_data[0];
+    const classNum = student_data[1];
+    const studentName = student_data[2];
+    // Update the student's grade
+    updateStudentGrade(grade, classNum, studentName, test, score);
+    // clear students dropdown choice
+    $('#students-bonus-dd').val(null).trigger('change');
+    // Reset score-input
+    $('#bonus-score-input').val('');
+});
+
+
+$('#daily-test-btn').click((e) => {
+    e.preventDefault(); // Do not reload
+    $('#daily-bonus').hide();
+    $('#daily-test').show();
+});
+
+$('#daily-bonus-btn').click((e) => {
+    e.preventDefault(); // Do not reload
+    $('#daily-test').hide();
+    $('#daily-bonus').show();
+});
+
 
 window.onload = async () => {
     const data = await get_data();
     const grades = data.grades;
+    const tests = data.tests;
+    const bonusses = data.bonusses;
     console.log(data);
 
     // Tests dropdown
     setupDropdown('tests-dd');
-    fillDropdown('tests-dd', data.tests, false, 'select test', test => {
+    fillDropdown('tests-dd', tests, false, 'select test', test => {
         console.log(`Selected test ${test}`);
     });
     
-    setupDropdown('students-dd');
-    fillDropdown('students-dd', searchList(grades), true, 'select name', (student) => {
+    setupDropdown('students-test-dd');
+    fillDropdown('students-test-dd', searchList(grades), true, 'select name', (student) => {
         console.log(`Selected student ${student}`);
         
         // Reset score-input
-        $('#score-input').val('');
-        });
-}
+        $('#test-score-input').val('');
+    });
+    setupDropdown('bonus-dd');
+    fillDropdown('bonus-dd', bonusses, false, 'select bonus', bonus => {
+        console.log(`Selected bonus ${bonus}`);
+    });
+    
+    setupDropdown('students-bonus-dd');
+    fillDropdown('students-bonus-dd', searchList(grades), true, 'select name', (student) => {
+        console.log(`Selected student ${student}`);
+        
+        // Reset score-input
+        $('#bonus-score-input').val('');
+    });
+
+    // Hide daily bonus
+    $('#daily-bonus').hide();}

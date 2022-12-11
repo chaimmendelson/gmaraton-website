@@ -20,20 +20,38 @@ body {
     border-radius: 5px;
 }
 
+.submit-btn{
+    width: 100%;
+    border-radius: 5px;
+}
 .dd-style{
     width: 50%;
     margin-left: 25%;
     margin-top: 80px;
+    background-color: blue;
 }
 
-#submit-btn:hover{
+.submit-btn:hover{
     background-color: #4CAF50;
     color: white;
     cursor: grab;
 }
-#submit-btn:focus{
+.submit-btn:focus{
     background-color: #3b8a3d;
     color: white;
     cursor: grabbing;
+}
+
+#daily-test{
+    position: absolute;
+    margin-left: 25%;
+    width: 50%;
+}
+
+#daily-bonus{
+    position: absolute;
+    margin-left: 25%;
+    width: 50%;
+
 }
 

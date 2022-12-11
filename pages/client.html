@@ -13,20 +13,42 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   </head>
   <body>
-    <form id="data-form">
-      <div class="dd-style">
-        <select id="tests-dd" class="dropdown" required></select>
-      </div>
-      <div class="dd-style">
-        <select id="students-dd" class="dropdown" required></select>
-      </div>
-      <div class="dd-style">
-        <input type="number" min=0 max=100 id="score-input" value="" class="form-d" placeholder="Enter Score" required>
-      </div>
-      <div class="dd-style">
-        <input type="submit" class="form-d" id="submit-btn">
-      </div>
-    </form>
+    <div>
+      <button id="daily-test-btn">Daily Test</button>
+      <button id="daily-bonus-btn">Daily Bonus</button>
+    </div>
+    <div id="daily-test">
+      <form id="test-form">
+        <div class="dd-style">
+          <select id="tests-dd" class="dropdown" required></select>
+        </div>
+        <div class="dd-style">
+          <select id="students-test-dd" class="dropdown" required></select>
+        </div>
+        <div class="dd-style">
+          <input type="number" min=0 max=100 id="test-score-input" value="" class="form-d" placeholder="Enter Score" required>
+        </div>
+        <div class="dd-style">
+          <input type="submit" class="submit-btn" id="test-submit-btn">
+        </div>
+      </form>
+    </div>
+    <div id="daily-bonus">
+      <form id="bonus-form">
+        <div class="dd-style">
+          <select id="bonus-dd" class="dropdown" required></select>
+        </div>
+        <div class="dd-style">
+          <select id="students-bonus-dd" class="dropdown" required></select>
+        </div>
+        <div class="dd-style">
+          <input type="number" min=0 max=10 id="bonus-score-input" value="" class="form-d" placeholder="Enter Score" required>
+        </div>
+        <div class="dd-style">
+          <input type="submit" class="submit-btn" id="bonus-submit-btn">
+        </div>
+      </form>
+    </div>
 
     <script src="scripts/client.js"></script>
   </body>
