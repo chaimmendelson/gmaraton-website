@@ -141,7 +141,8 @@ def insert_new_user(table, class_num, name):
     for column in TESTS:
         if column == TEST1:
             student.append('70')
-        student.append('0')
+        else:
+            student.append('0')
     for column in BONUSES:
         student.append('0')
     execute(f"insert into {table}({', '.join(COLUMNS_L)}) values({', '.join(student)});").close()
