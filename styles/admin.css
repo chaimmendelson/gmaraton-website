@@ -25,6 +25,18 @@ body {
 
 #add-tables{
     float: left;
+    background-color: blanchedalmond;
+}
+
+#selects{
+    float: right;
+    width: 30%;
+    border: black solid 1px;
+}
+
+#select-buttons{
+    margin: auto;
+    width: fit-content;
 }
 th {
     background: white;
@@ -72,6 +84,5 @@ td{
 }
 
 .input-form{
-    width: 50%;
-    float: right;
+    width: 100%;
 }

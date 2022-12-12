@@ -81,13 +81,10 @@ function table_list(grades, tests, bonusses){
             }
         }
     }
-    console.log(grades);
-    console.log(tl);
     return tl;
 }
 
 function attendents_table_list(additional, attetdents){
-    console.log(additional);
     let translate = {'nine': 'ט', 'ten': 'י', 'eleven': 'יא', 'twelve': 'יב'}
     //format = {"nine": {"competition": 0, "1": {"attend1": 0, "attend2": 0, "attend3": 0}}}
     tl = []
@@ -110,7 +107,6 @@ function attendents_table_list(additional, attetdents){
 
 
 function competition_table_list(additional, competition){
-    console.log(additional);
     let translate = {'nine': 'ט', 'ten': 'י', 'eleven': 'יא', 'twelve': 'יב'}
     //format = {"nine": {"competition": 0, "1": {"attend1": 0, "attend2": 0, "attend3": 0}}}
     tl = []
@@ -184,9 +180,9 @@ async function reloadTable(){
     competition_table.innerHTML = '';
     generateTableHead(competition_table, competition_keys);
     generateTable(competition_table, competition);
-}
+};
 
-$('#relode').click(reloadTable);
+$('#reload').click(reloadTable);
 
 function setupDropdown(dropdownID) {
     // Get the dropdown

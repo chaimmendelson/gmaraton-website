@@ -20,45 +20,46 @@
       <div class="table-div">
         <table id="attendents_table"></table>
       </div>
-      <br>
       <div class="table-div">
         <table id="competition-table"></table>
       </div>
     </div>
-    <div>
-      <button id="daily-btn">Daily Attendence</button>
-      <button id="comp-btn">Competitions</button>
+    <div id="selects">
+      <div id="select-buttons">
+        <button id="daily-btn">Daily Attendence</button>
+        <button id="comp-btn">Competitions</button>
+      </div>
+      <div id="daily-data" class="input-form">
+        <form id="daily-form">
+          <div class="dd-style">
+            <select id="daily-key" class="dropdown" required></select>
+          </div>
+          <div class="dd-style">
+            <select id="daily-classes" class="dropdown" required></select>
+          </div>
+          <div class="dd-style">
+            <input type="number" min=0 max=50 id="daily-value-input" value="" class="form-d" placeholder="Enter Value" required>
+          </div>
+          <div class="dd-style">
+            <input type="submit" class="submit-btn" id="submit-daily-btn">
+          </div>
+        </form>
+      </div>
+      <div id="comp-data" class="input-form">
+        <form id="comp-form">
+          <div class="dd-style">
+            <select id="comp-grades" class="dropdown" required></select>
+          </div>
+          <div class="dd-style">
+            <input type="number" min=0 max=50 id="comp-value-input" value="" class="form-d" placeholder="Enter Value" required>
+          </div>
+          <div class="dd-style">
+            <input type="submit" class="submit-btn" id="submit-comp-btn">
+          </div>
+        </form>
+      </div>
     </div>
-    <div id="daily-data" class="input-form">
-      <form id="daily-form">
-        <div class="dd-style">
-          <select id="daily-key" class="dropdown" required></select>
-        </div>
-        <div class="dd-style">
-          <select id="daily-classes" class="dropdown" required></select>
-        </div>
-        <div class="dd-style">
-          <input type="number" min=0 max=50 id="daily-value-input" value="" class="form-d" placeholder="Enter Value" required>
-        </div>
-        <div class="dd-style">
-          <input type="submit" class="submit-btn" id="submit-daily-btn">
-        </div>
-      </form>
-    </div>
-    <div id="comp-data" class="input-form">
-      <form id="comp-form">
-        <div class="dd-style">
-          <select id="comp-grades" class="dropdown" required></select>
-        </div>
-        <div class="dd-style">
-          <input type="number" min=0 max=50 id="comp-value-input" value="" class="form-d" placeholder="Enter Value" required>
-        </div>
-        <div class="dd-style">
-          <input type="submit" class="submit-btn" id="submit-comp-btn">
-        </div>
-      </form>
-    </div>
-    <button id="reload">Relode</button>
+    <button id="reload">Reload</button>
     <a href="/display">display</a>
     <script src="scripts/admin.js"></script>
   </body>
