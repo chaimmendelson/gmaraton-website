@@ -8,6 +8,7 @@ ATTENDENCE_C = 0.2
 TEST_C = 0.7
 BONUS_C = 0.3
 
+
 if uname().system == 'Windows':
         DB_CONN = pg2.connect(database='gmaraton', user='postgres', password=132005)
 else:
@@ -142,7 +143,7 @@ def reset_tables()->None:
 def insert_new_user(table, class_num, name):
     student = [class_num, name]
     for column in TESTS:
-        student.append('40')
+        student.append('0')
     for column in BONUSES:
         student.append('0')
     execute(f"insert into {table}({', '.join(COLUMNS_L)}) values({', '.join(student)});").close()
@@ -158,8 +159,6 @@ def get_student_amount(table, class_num):
 
 
 def update_grade(table, class_num, name, column, new_value):
-    if new_value < 40:
-        new_value = 40
     execute(f"update {table} set {column} = '{new_value}'\
             where {CLASS} = {class_num} and {NAME} = '{name}';").close()
                 
@@ -191,6 +190,7 @@ def get_class_score(table, class_num):
     for day in ATTENDS:   
         sum += get_attendence_percente(table, class_num, day) * 100 * ATTENDENCE_C
     return sum / 3.0
+
 
 
 def get_class_numbers_list(table):
