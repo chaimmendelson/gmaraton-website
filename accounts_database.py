@@ -173,7 +173,8 @@ def update_bonus(table, class_num, name, bonus, new_value):
     new_bonus = current_bonus + new_value
     if new_bonus > 10:
         new_bonus = 10
-    update_grade(table, class_num, name, bonus, new_bonus)
+    execute(f"update {table} set {bonus} = '{new_bonus}'\
+            where {CLASS} = {class_num} and {NAME} = '{name}';").close()
 
 
 def get_class_test_avg(table, class_num, test):
