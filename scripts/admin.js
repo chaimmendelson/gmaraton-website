@@ -256,7 +256,7 @@ $('#submit-daily-btn').click((e) => {
 });
 
 
-$('#submit-cmp-btn').click((e) => {
+$('#submit-comp-btn').click((e) => {
     e.preventDefault(); // Do not reload
     const form = $('#comp-form')[0];
     if (!form.checkValidity()) {// Validate form
@@ -265,7 +265,7 @@ $('#submit-cmp-btn').click((e) => {
     }
     
     // Get the values
-    translate = {'ט': 'nine', 'י': 'ten', 'יא': 'eleven', 'יב': 'twelve'}
+    let translate = {'ט': 'nine', 'י': 'ten', 'יא': 'eleven', 'יב': 'twelve'}
     const grade = translate[$('#comp-grade').val()];
     const score = $('#comp-value-input').val();
     // Update the student's grade
@@ -316,8 +316,8 @@ window.onload = async () => {
         $('#daily-value-input').val('');
     });
     
-    setupDropdown('comp-grades');
-    fillDropdown('comp-grades', comp_grades, false, 'select grade', grade => {
+    setupDropdown('comp-grade');
+    fillDropdown('comp-grade', comp_grades, false, 'select grade', grade => {
         console.log(`Selected ${grade}`);
         
         // Reset score-input

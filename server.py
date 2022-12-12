@@ -116,7 +116,7 @@ async def admin_update(request: web.Request):
     if data['column'] in db.ATTENDS:
         db.set_attendents(data['grade'], data['class'], data['column'], int(data['value']))
     elif data['column'] == db.COMPETITION:
-        db.set_competition(data['grade'], data['class'], int(data['value']))
+        db.set_competition(data['grade'], int(data['value']))
     return web.json_response({'status': 'ok'})
 
 
