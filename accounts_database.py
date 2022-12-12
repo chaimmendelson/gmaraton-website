@@ -184,12 +184,12 @@ def get_class_test_avg(table, class_num, test):
 def get_class_score(table, class_num):
     sum = 0
     for test in TESTS:
-        sum += get_class_test_avg(table, class_num, test) * TEST_C * 0.28
+        sum += get_class_test_avg(table, class_num, test) * TEST_C
     for bonus in BONUSES:
-        sum += get_class_test_avg(table, class_num, bonus) * 10 * BONUS_C * 0.28
+        sum += get_class_test_avg(table, class_num, bonus) * 10 * BONUS_C
     for day in ATTENDS:   
-        sum += get_attendence(table, class_num, day) * ATTENDENCE_C * 0.28
-    return sum
+        sum += get_attendence_percente(table, class_num, day) * 100 * ATTENDENCE_C
+    return sum / 3.0
 
 
 def get_class_numbers_list(table):
@@ -264,10 +264,11 @@ def set_attendents(table, class_num, day, attendents):
         json.dump(dictionary, outfile)
 
 
-def get_attendence(table, class_num, day):
+def get_attendence_percente(table, class_num, day):
     with open("additional_grades.json", "r") as infile:
         dictionary = json.load(infile)
-    return dictionary[table][str(class_num)][day]
+    amount = dictionary[table][str(class_num)][day]
+    return round(get_student_amount(table, class_num) / amount, 1)
 
 
 def get_competition(table):
@@ -288,7 +289,7 @@ def get_additional_grading():
         dictionary = json.load(infile)
     return dictionary
 
-    
+
 def main():
     # reset_tables()
     pass
