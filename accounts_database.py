@@ -6,7 +6,7 @@ from platform import uname
 
 ATTENDENCE_C = 0.2
 TEST_C = 0.7
-BONUS_C = 0.1
+BONUS_C = 0.3
 
 if uname().system == 'Windows':
         DB_CONN = pg2.connect(database='gmaraton', user='postgres', password=132005)
