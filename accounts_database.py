@@ -136,6 +136,7 @@ def reset_tables()->None:
     drop_tables()
     create_tables()
     load_database()
+    set_additional_grading()
 
 
 def insert_new_user(table, class_num, name):
@@ -281,10 +282,17 @@ def set_competition(table, new_value):
     with open("additional_grades.json", "w") as outfile:
         json.dump(dictionary, outfile)
 
-        
+
+def get_additional_grading():
+    with open("additional_grades.json", "r") as infile:
+        dictionary = json.load(infile)
+    return dictionary
+
+    
 def main():
-    #reset_tables()
-    set_additional_grading()
-    set_attendents(NINE, 1, ATTEND1, 40)
+    # reset_tables()
+    pass
+
+
 if __name__ == '__main__':
     main()

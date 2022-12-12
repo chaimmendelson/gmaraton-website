@@ -6,7 +6,7 @@ COOKIES = []
     
 COOKIE_NAME = 'gmaraton-cookie'
 ADMIN_COOKIE_NAME = 'gmaraton-admin-cookie'
-EMAILS = []
+EMAILS = ['netanel.goltsman@gmail.com', 'elchairoy@gmail.com', 'Erdfarbm@gmail.com', 'Ariel4121@gmail.com']
 ADMIN_COOKIE = None
 
 
@@ -127,6 +127,9 @@ async def data(request: web.Request):
     # Default is to give grades list and tests list
     if is_admin(request):
         grades = db.get_school_table()
+        return web.json_response({'status': 'ok', 'grades': grades, 'bonusses': db.BONUSES,
+         'tests': db.TESTS, 'competition': db.COMPETITION,
+          'attendence': db.ATTENDS, 'additional': db.get_additional_grading()})
     else:
         grades = {}
         for grade in db.TABLES_NAMES:
@@ -135,7 +138,7 @@ async def data(request: web.Request):
             for class_num in class_list:
                 class_dict[class_num] = db.get_class_names(grade, class_num)
             grades[grade] = class_dict
-    return web.json_response({'status': 'ok', 'grades': grades, 'bonusses': db.BONUSES, 'tests': db.TESTS, 'competition': db.COMPETITION, 'attendence': db.ATTENDS})
+    return web.json_response({'status': 'ok', 'grades': grades, 'bonusses': db.BONUSES, 'tests': db.TESTS})
             
 
 async def login_validation(request: web.Request):
@@ -167,10 +170,16 @@ async def results(request: web.Request):
 
     return web.json_response({'status': 'ok', 'results': results})
 
+async def reset(request: web.Request):
+    # Auth
+    if is_admin(request):
+        db.reset_tables()
+
 
 app.add_routes([web.get('/', game_page),
                 web.get('/login', login),
                 web.get('/display', display),
+                web.get('/reset', reset),
                 web.post('/validate', login_validation),
                 web.post('/update', update),
                 web.post('/admin_update', admin_update),

@@ -43,6 +43,7 @@ async function get_data(){
         bonusses: data['bonusses'],
         competition : data['competition'],
         attendence : data['attendence'],
+        additional : data['additional'],
     };
 }
 
@@ -80,8 +81,48 @@ function table_list(grades, tests, bonusses){
             }
         }
     }
+    console.log(grades);
+    console.log(tl);
     return tl;
 }
+
+function attendents_table_list(additional, attetdents){
+    console.log(additional);
+    let translate = {'nine': 'ט', 'ten': 'י', 'eleven': 'יא', 'twelve': 'יב'}
+    //format = {"nine": {"competition": 0, "1": {"attend1": 0, "attend2": 0, "attend3": 0}}}
+    tl = []
+    for(grade in additional){
+        for(classNum in additional[grade]){
+            if (classNum == 'competition')
+                continue;
+            at = {}
+            at['grade'] = translate[grade];
+            at['class'] = classNum;
+            for(attetdent in attetdents){
+                let att = attetdents[attetdent];
+                at[att] = additional[grade][classNum][att];
+            }
+            tl.push(at);
+        }
+    }
+    return tl;
+}
+
+
+function competition_table_list(additional, competition){
+    console.log(additional);
+    let translate = {'nine': 'ט', 'ten': 'י', 'eleven': 'יא', 'twelve': 'יב'}
+    //format = {"nine": {"competition": 0, "1": {"attend1": 0, "attend2": 0, "attend3": 0}}}
+    tl = []
+    for(grade in additional){
+        at = {}
+        at['grade'] = translate[grade];
+        at['score'] = additional[grade]['competition'];
+        tl.push(at);
+        }
+    return tl;
+}
+
 function reverseTranslate(grade_and_class){
     translate = {'ט': 'nine', 'י': 'ten', 'יא': 'eleven', 'יב': 'twelve'}
     //grade and class are in the same string and are first and then the name
@@ -117,13 +158,32 @@ async function reloadTable(){
     const data = await get_data();
     const grades = data.grades;
     const tests = data.tests;
-    const bonus = data.bonus;
+    const bonus = data.bonusses;
     let students = table_list(grades, tests, bonus);
     let table = document.querySelector("table");
     let table_keys = Object.keys(students[0]);
     table.innerHTML = '';
     generateTableHead(table, table_keys);
     generateTable(table, students);
+
+    //setup attendents table
+    let attendents = data.attendence;
+    let additional = data.additional;
+    let competition = data.competition;
+    let attendents_table = document.querySelector("#attendents_table");
+    attendents = attendents_table_list(additional, attendents);
+    let attendents_keys = Object.keys(attendents[0]);
+    attendents_table.innerHTML = '';
+    generateTableHead(attendents_table, attendents_keys);
+    generateTable(attendents_table, attendents);
+
+    //setup competition table
+    let competition_table = document.querySelector("#competition-table");
+    competition = competition_table_list(additional, competition);
+    let competition_keys = Object.keys(competition[0]);
+    competition_table.innerHTML = '';
+    generateTableHead(competition_table, competition_keys);
+    generateTable(competition_table, competition);
 }
 
 $('#relode').click(reloadTable);

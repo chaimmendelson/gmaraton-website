@@ -17,6 +17,15 @@ body {
     float: left;
 }
 
+.table-div{
+    width: fit-content;
+    margin: auto;
+    border: black solid 1px;
+}
+
+#add-tables{
+    float: left;
+}
 th {
     background: white;
     position: sticky;
