@@ -33,8 +33,8 @@ ATTEND2 = 'attend2'
 ATTEND3 = 'attend3'
 COMPETITION = 'competition'
 
-WEIGHT = {TEST1: 0.1, TEST2: 0.3, TEST3: 0.3, BONUS1: 0.03, BONUS2: 0.03, BONUS3: 0.03, ATTEND1: 0.07, ATTEND2: 0.07, ATTEND3: 0.07}
-
+WEIGHT = {TEST1: 0.1, TEST2: 0.3, TEST3: 0.3, BONUS1: 0, BONUS2: 0.045, BONUS3: 0.045, ATTEND1: 0.07, ATTEND2: 0.07, ATTEND3: 0.07}
+BONUS_MULTIPLIER = 3
 
 C_TYPE = 'type'
 C_LEN = 'len'
@@ -185,7 +185,7 @@ def get_class_score(table, class_num):
     for test in TESTS:
         sum += get_class_test_avg(table, class_num, test) * WEIGHT[test]
     for bonus in BONUSES:
-        sum += get_class_test_avg(table, class_num, bonus) * 10 * WEIGHT[bonus]
+        sum += get_class_test_avg(table, class_num, bonus) * 10 * WEIGHT[bonus] * BONUS_MULTIPLIER
     for day in ATTENDS:   
         sum += get_attendence_percente(table, class_num, day) * 100 * WEIGHT[day]
     return sum
