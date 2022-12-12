@@ -4,10 +4,6 @@ import json
 import get_students
 from platform import uname
 
-ATTENDENCE_C = 0.2
-TEST_C = 0.7
-BONUS_C = 0.3
-
 
 if uname().system == 'Windows':
         DB_CONN = pg2.connect(database='gmaraton', user='postgres', password=132005)
@@ -37,7 +33,7 @@ ATTEND2 = 'attend2'
 ATTEND3 = 'attend3'
 COMPETITION = 'competition'
 
-BONUS_SUBJECT = 'bonus_subject'
+WEIGHT = {TEST1: 0.1, TEST2: 0.3, TEST3: 0.3, BONUS1: 0.03, BONUS2: 0.03, BONUS3: 0.03, ATTEND1: 0.07, ATTEND2: 0.07, ATTEND3: 0.07}
 
 
 C_TYPE = 'type'
@@ -143,6 +139,8 @@ def reset_tables()->None:
 def insert_new_user(table, class_num, name):
     student = [class_num, name]
     for column in TESTS:
+        if column == TEST1:
+            student.append('70')
         student.append('0')
     for column in BONUSES:
         student.append('0')
@@ -184,12 +182,12 @@ def get_class_test_avg(table, class_num, test):
 def get_class_score(table, class_num):
     sum = 0
     for test in TESTS:
-        sum += get_class_test_avg(table, class_num, test) * TEST_C
+        sum += get_class_test_avg(table, class_num, test) * WEIGHT[test]
     for bonus in BONUSES:
-        sum += get_class_test_avg(table, class_num, bonus) * 10 * BONUS_C
+        sum += get_class_test_avg(table, class_num, bonus) * 10 * WEIGHT[bonus]
     for day in ATTENDS:   
-        sum += get_attendence_percente(table, class_num, day) * 100 * ATTENDENCE_C
-    return sum / 3.0
+        sum += get_attendence_percente(table, class_num, day) * 100 * WEIGHT[day]
+    return sum
 
 
 
