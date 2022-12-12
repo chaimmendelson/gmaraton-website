@@ -268,7 +268,7 @@ def get_attendence_percente(table, class_num, day):
     with open("additional_grades.json", "r") as infile:
         dictionary = json.load(infile)
     amount = dictionary[table][str(class_num)][day]
-    return round(get_student_amount(table, class_num) / amount, 1)
+    return round(amount / get_student_amount(table, class_num), 1)
 
 
 def get_competition(table):
