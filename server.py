@@ -6,7 +6,7 @@ COOKIES = []
     
 COOKIE_NAME = 'gmaraton-cookie'
 ADMIN_COOKIE_NAME = 'gmaraton-admin-cookie'
-EMAILS = ['netanel.goltsman@gmail.com', 'elchairoy@gmail.com', 'Erdfarbm@gmail.com', 'Ariel4121@gmail.com']
+EMAILS = ['netanel.goltsman@gmail.com', 'elchairoy@gmail.com', 'Erdfarbm@gmail.com', 'Ariel4121@gmail.com', 'gmaraton']
 ADMIN_COOKIE = None
 
 
