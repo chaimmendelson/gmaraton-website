@@ -305,10 +305,14 @@ def get_additional_grading():
 
 
 def factor_test2():
-    # this function will add 25 points to the test score of the student with a score, capped by 100
-    pass
-
-
+    # this function will add 20 points to the test score of the student with a score, capped by 100
+    # only for test2
+    #update grade for the first kid in nine to 50
+    for table in TABLES_NAMES:
+        for class_num in get_class_numbers_list(table):
+            for student in get_class_table(table, class_num):
+                if student[2] > 0:
+                    update_grade(table, class_num, student[0], TEST2, min(student[2] + 20, 100))
 def main():
     # reset_tables()
     pass
