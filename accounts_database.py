@@ -182,8 +182,9 @@ def get_class_test_avg(table, class_num, test):
 
 def get_class_test_avg2(table, class_num, test):
     counter = execute(f"select count(*) from {table} where {CLASS} = {class_num} and {test} > 0;").fetchone()[0]
+    print(counter)
     test_sum = execute(f"select sum({test}) from {table} where {CLASS} = {class_num};").fetchone()[0]
-    if test_sum == None:
+    if not counter:
         return 0
     return round(test_sum / counter)
 
