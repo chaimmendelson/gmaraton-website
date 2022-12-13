@@ -180,6 +180,13 @@ def get_class_test_avg(table, class_num, test):
     return round(test_sum / get_student_amount(table, class_num))
 
 
+def get_class_test_avg2(table, class_num, test):
+    test_sum = execute(f"select sum({test}) from {table} where {CLASS} = {class_num} and {test} > 0;").fetchone()[0]
+    if test_sum == None:
+        return 0
+    return round(test_sum / get_student_amount(table, class_num))
+
+
 def get_class_score(table, class_num):
     sum = 0
     for test in TESTS:
