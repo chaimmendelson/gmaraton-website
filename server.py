@@ -127,9 +127,27 @@ async def data(request: web.Request):
     # Default is to give grades list and tests list
     if is_admin(request):
         grades = db.get_school_table()
+        # return a dict of avreage for each test for each class, the test as the key and a dict as a value:
+        # {test: {grade: {class: avreage}}}
+        avreages = {}
+        for test in db.TESTS:
+            avreages[test] = {}
+            for grade in db.TABLES_NAMES:
+                avreages[test][grade] = {}
+                for class_num in db.get_class_numbers_list(grade):
+                    avreages[test][grade][class_num] = db.get_avreage(grade, class_num, test)
+        # same for bonusses
+        bonusses = {}
+        for bonus in db.BONUSES:
+            bonusses[bonus] = {}
+            for grade in db.TABLES_NAMES:
+                bonusses[bonus][grade] = {}
+                for class_num in db.get_class_numbers_list(grade):
+                    bonusses[bonus][grade][class_num] = db.get_avreage(grade, class_num, bonus)
         return web.json_response({'status': 'ok', 'grades': grades, 'bonusses': db.BONUSES,
          'tests': db.TESTS, 'competition': db.COMPETITION,
-          'attendence': db.ATTENDS, 'additional': db.get_additional_grading()})
+          'attendence': db.ATTENDS, 'additional': db.get_additional_grading(),
+           'tests_avreages': avreages, 'bonusses_avreages': bonusses})
     else:
         grades = {}
         for grade in db.TABLES_NAMES:

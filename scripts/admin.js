@@ -35,7 +35,8 @@ async function get_data(){
     // Check for errors
     if (data['status'] == 'error')
         return null;
-
+    console.log(data.tests_avreages);
+    console.log(data.bonusses_avreages);
     // We don't want to return the status; It's not needed.
     return {
         grades: data['grades'],
