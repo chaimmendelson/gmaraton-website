@@ -135,7 +135,7 @@ async def data(request: web.Request):
             for grade in db.TABLES_NAMES:
                 avreages[test][grade] = {}
                 for class_num in db.get_class_numbers_list(grade):
-                    avreages[test][grade][class_num] = db.get_class_test_avg2(grade, class_num, test)
+                    avreages[test][grade][class_num] = db.get_class_test_avg(grade, class_num, test)
         # same for bonusses
         bonusses = {}
         for bonus in db.BONUSES:
