@@ -147,12 +147,12 @@ async def data(request: web.Request):
         additional = db.get_additional_grading()
         for table in db.TABLES_NAMES:
             comp = additional[table][db.COMPETITION]
-            comp_score = round((comp / 100) * 50, 1)
+            comp_score = round((comp / 100) * 40, 1)
             grade_score = 0
             for classNum in db.get_class_numbers_list(table):
                 grade_score += db.get_class_score(table, classNum)
             grade_score //= db.get_class_count(table)
-            grade_score *= 0.5
+            grade_score *= 0.6
             grade_score = round(grade_score, 1)
             score = grade_score + comp_score
             additional[table][db.COMPETITION] = {'comp': comp, 'score': score}
