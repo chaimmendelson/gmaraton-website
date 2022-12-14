@@ -38,6 +38,7 @@ async function get_data(){
     console.log(data.tests_avreages);
     console.log(data.bonusses_avreages);
     // We don't want to return the status; It's not needed.
+    console.log(data['additional'])
     return {
         grades: data['grades'],
         tests: data['tests'],
@@ -114,7 +115,8 @@ function competition_table_list(additional, competition){
     for(grade in additional){
         at = {}
         at['grade'] = translate[grade];
-        at['score'] = additional[grade]['competition'];
+        at['comp_score'] = additional[grade]['competition']['comp'];
+        at['final_grade'] = additional[grade]['competition']['score'];
         tl.push(at);
         }
     return tl;

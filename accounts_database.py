@@ -293,7 +293,9 @@ def get_competition(table):
 def set_competition(table, new_value):
     with open("additional_grades.json", "r") as infile:
         dictionary = json.load(infile)
-    dictionary[table][COMPETITION] = new_value
+    current_score = int(dictionary[table][COMPETITION])
+    dictionary[table][COMPETITION] = int(new_value) + current_score
+    print(dictionary[table][COMPETITION])
     with open("additional_grades.json", "w") as outfile:
         json.dump(dictionary, outfile)
 

@@ -144,9 +144,21 @@ async def data(request: web.Request):
                 bonusses[bonus][grade] = {}
                 for class_num in db.get_class_numbers_list(grade):
                     bonusses[bonus][grade][class_num] = db.get_class_test_avg(grade, class_num, bonus)
+        additional = db.get_additional_grading()
+        for table in db.TABLES_NAMES:
+            comp = additional[table][db.COMPETITION]
+            comp_score = round((comp / 100) * 50, 1)
+            grade_score = 0
+            for classNum in db.get_class_numbers_list(table):
+                grade_score += db.get_class_score(table, classNum)
+            grade_score //= db.get_class_count(table)
+            grade_score *= 0.5
+            grade_score = round(grade_score, 1)
+            score = grade_score + comp_score
+            additional[table][db.COMPETITION] = {'comp': comp, 'score': score}
         return web.json_response({'status': 'ok', 'grades': grades, 'bonusses': db.BONUSES,
          'tests': db.TESTS, 'competition': db.COMPETITION,
-          'attendence': db.ATTENDS, 'additional': db.get_additional_grading(),
+          'attendence': db.ATTENDS, 'additional': additional,
            'tests_avreages': avreages, 'bonusses_avreages': bonusses})
     else:
         grades = {}
@@ -166,6 +178,10 @@ async def login_validation(request: web.Request):
         data = await request.json()
         if 'username' in data and 'password' in data:
             if data['username'] == 'gmaraton' and data['password'] in EMAILS:
+                if data['password'] == 'gmaraton':
+                    response = web.json_response({'status': 'ok'})
+                    response.set_cookie(ADMIN_COOKIE_NAME, ADMIN_COOKIE)
+                    return response
                 cookie = create_cookie()
                 response = web.json_response({'status': 'ok'})
                 response.set_cookie(COOKIE_NAME, cookie)
