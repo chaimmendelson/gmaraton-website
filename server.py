@@ -178,10 +178,6 @@ async def login_validation(request: web.Request):
         data = await request.json()
         if 'username' in data and 'password' in data:
             if data['username'] == 'gmaraton' and data['password'] in EMAILS:
-                if data['password'] == 'gmaraton':
-                    response = web.json_response({'status': 'ok'})
-                    response.set_cookie(ADMIN_COOKIE_NAME, ADMIN_COOKIE)
-                    return response
                 cookie = create_cookie()
                 response = web.json_response({'status': 'ok'})
                 response.set_cookie(COOKIE_NAME, cookie)
@@ -207,7 +203,7 @@ async def results(request: web.Request):
 async def reset(request: web.Request):
     # Auth
     if is_admin(request):
-        db.reset_tables()
+        db.reset_competition()
 
 
 app.add_routes([web.get('/', game_page),
