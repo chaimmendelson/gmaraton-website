@@ -116,6 +116,7 @@ function competition_table_list(additional, competition){
         at = {}
         at['grade'] = translate[grade];
         at['comp_score'] = additional[grade]['competition']['comp'];
+        at['collection'] = additional[grade]['competition']['avg'];
         at['final_grade'] = additional[grade]['competition']['score'];
         tl.push(at);
         }
