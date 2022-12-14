@@ -155,7 +155,7 @@ async def data(request: web.Request):
             avg = grade_score
             grade_score *= 0.6
             grade_score = round(grade_score, 1)
-            score = grade_score + comp_score
+            score = round(grade_score + comp_score, 1)
             additional[table][db.COMPETITION] = {'comp': comp, 'score': score, 'avg': avg}
         return web.json_response({'status': 'ok', 'grades': grades, 'bonusses': db.BONUSES,
          'tests': db.TESTS, 'competition': db.COMPETITION,
