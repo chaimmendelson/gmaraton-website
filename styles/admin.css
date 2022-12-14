@@ -5,7 +5,7 @@
 }
 
 body {
-    background-color: pink;
+    background-color: gainsboro;
 }
 
 #school-table-div{
@@ -84,4 +84,8 @@ td{
 
 .input-form{
     width: 100%;
+}
+
+#add-tables{
+    width: 20%;
 }

@@ -294,6 +294,17 @@ $('#comp-btn').click((e) => {
 });
 
 
+$('#show-resualts').click((e) => {
+    e.preventDefault(); // Do not reload
+    if ( $('#competition-table').css('display') == 'none' || $('#competition-table').css("visibility") == "hidden"){
+        // 'element' is hidden
+        $('#competition-table').show();
+    }
+    else{
+        $('#competition-table').hide();
+    }
+});
+
 window.onload = async () => {
     reloadTable();
     translate = {'nine': 'ט', 'ten': 'י', 'eleven': 'יא', 'twelve': 'יב'}
@@ -329,4 +340,5 @@ window.onload = async () => {
     });
 
     // Hide daily bonus
+    $('#competition-table').hide();
     $('#comp-data').hide();}
