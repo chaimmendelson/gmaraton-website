@@ -163,12 +163,7 @@ def reset_tables()->None:
 
 def insert_new_user(table, class_num, name):
     student = [class_num, name]
-    for column in TESTS:
-        if column == TEST1:
-            student.append('70')
-        else:
-            student.append('0')
-    for column in BONUSES:
+    for column in TESTS + BONUSES:
         student.append('0')
     execute(f"insert into {table}({', '.join(COLUMNS_L)}) values({', '.join(student)});").close()
 
@@ -232,7 +227,7 @@ def get_class_numbers_list(table):
     return data
 
 def get_class_count(table):
-    return len(get_class_numbers_list(table))
+    return max(len(get_class_numbers_list(table)), 1)
 
 
 def get_grade_score(table):
@@ -254,7 +249,8 @@ def load_database():
     if not isinstance(students, list):
         return False
     for student in students:
-        table = translate[student['grade']]
+        #table = translate[student['grade']]
+        table = student['grade']
         name = student['name'].replace("'", "")
         name = f"'{name}'"
         insert_new_user(table, student['class_num'], name)
