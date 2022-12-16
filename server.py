@@ -151,7 +151,7 @@ async def data(request: web.Request):
             grade_score = 0
             for classNum in db.get_class_numbers_list(table):
                 grade_score += db.get_class_score(table, classNum)
-            grade_score //= db.get_class_count(table)
+            grade_score //= 1 #db.get_class_count(table)
             avg = grade_score
             grade_score *= 0.6
             grade_score = round(grade_score, 1)
