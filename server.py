@@ -151,7 +151,7 @@ async def data(request: web.Request):
             grade_score = 0
             for classNum in db.get_class_numbers_list(table):
                 grade_score += db.get_class_score(table, classNum)
-            grade_score //= 1 #db.get_class_count(table)
+            grade_score //= db.get_class_count(table)
             avg = grade_score
             grade_score *= 0.6
             grade_score = round(grade_score, 1)
@@ -203,23 +203,24 @@ async def results(request: web.Request):
 
 async def reset(request: web.Request):
     # Auth
-    if is_admin(request):
-        db.reset_tables()
+    #if is_admin(request):
+    db.reset_tables()
 
 
-app.add_routes([web.get('/', game_page),
-                web.get('/login', login),
-                web.get('/display', display),
-                web.get('/reset', reset),
-                web.post('/validate', login_validation),
-                web.post('/update', update),
-                web.post('/admin_update', admin_update),
-                web.post('/data', data),
-                web.post('/results', results),
-                web.static('/scripts', 'scripts'),
-                web.static('/styles', 'styles'),
-                web.static('/images', 'images')])
+# app.add_routes([web.get('/', game_page),
+#                 web.get('/login', login),
+#                 web.get('/display', display),
+#                 web.get('/reset', reset),
+#                 web.post('/validate', login_validation),
+#                 web.post('/update', update),
+#                 web.post('/admin_update', admin_update),
+#                 web.post('/data', data),
+#                 web.post('/results', results),
+#                 web.static('/scripts', 'scripts'),
+#                 web.static('/styles', 'styles'),
+#                 web.static('/images', 'images')])
 
+app.add_routes([web.get('/reset', reset),])
 if __name__ == '__main__':
     print('Starting server...')
     get_admin_cookie()
