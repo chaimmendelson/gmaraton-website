@@ -3,6 +3,6 @@
    "A": "surname",
    "B": "name",
    "C": "grade",
-   "D": "class_num
+   "D": 0
  }
 ]
