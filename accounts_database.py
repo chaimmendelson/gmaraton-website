@@ -156,9 +156,9 @@ def drop_tables()->None:
 
 def reset_tables()->None:
     drop_tables()
-    create_tables()
-    load_database()
-    set_additional_grading()
+    # create_tables()
+    # load_database()
+    # set_additional_grading()
 
 
 def insert_new_user(table, class_num, name):
