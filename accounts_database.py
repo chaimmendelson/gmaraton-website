@@ -33,7 +33,17 @@ ATTEND2 = 'attend2'
 ATTEND3 = 'attend3'
 COMPETITION = 'competition'
 
-WEIGHT = {TEST1: 0.1, TEST2: 0.42, TEST3: 0.42, BONUS1: 0, BONUS2: 0, BONUS3: 0, ATTEND1: 0.02, ATTEND2: 0.02, ATTEND3: 0.02}
+WEIGHT = {
+        TEST1: 0.1,
+        TEST2: 0.42,
+        TEST3: 0.42,
+        BONUS1: 0,
+        BONUS2: 0,
+        BONUS3: 0,
+        ATTEND1: 0.02,
+        ATTEND2: 0.02,
+        ATTEND3: 0.02,
+        }
 BONUS_MULTIPLIER = 3.5
 
 C_TYPE = 'type'
@@ -56,42 +66,57 @@ TESTS = [TEST1, TEST2, TEST3]
 BONUSES = [BONUS1, BONUS2, BONUS3]
 ATTENDS = [ATTEND1, ATTEND2, ATTEND3]
 
+
+def check_class_num(table, class_num):
+    if not class_num.isnumeric():
+        print("class_num must be an integer")
+        return False
+    return int(class_num) in get_class_numbers_list(table)
+
+
+def check_name(table, class_num, name):
+    return name in get_class_names(table, class_num)
+
+
+def check_column(column):
+    return column in COLUMNS_L
+
+
+def check_value(column, value):
+    type = get_type(column)
+    if type == 'varchar':
+        if not isinstance(value, str):
+            print("value must be a string")
+            return False
+        if get_len(column):
+            if len(value) > get_len(column):
+                print("value is too long")
+                return False
+    elif type == 'decimal':
+        if not value.isnumeric():
+            print("value must be an integer")
+            return False
+        if int(value) > 100:
+            print("value must be equal or less than 100")
+            return False
+    return True
+
 def check_data(table, class_num=None, name=None, column=None, value=None):
     if table not in TABLES_NAMES:
         print("Table does not exist")
         return False
     if class_num:
-        if not class_num.isnumeric():
-            print("class_num must be an integer")
-            return False
-        if int(class_num) not in get_class_numbers_list(table):
-            print("class_num invalid (not in class list)")
+        if not check_class_num(table, class_num):
             return False
         if name:
-            if name not in get_class_names(table, class_num):
-                print("name invalid")
+            if not check_name(table, class_num, name):
                 return False
             if column:
-                if column not in COLUMNS:
-                    print("column does not exist")
+                if not check_column(column):
                     return False
                 if value:
-                    type = get_type(column)
-                    if type == 'varchar':
-                        if not isinstance(value, str):
-                            print("value must be a string")
-                            return False
-                        if get_len(column):
-                            if len(value) > get_len(column):
-                                print("value is too long")
-                                return False
-                    elif type == 'decimal':
-                        if not value.isnumeric():
-                            print("value must be an integer")
-                            return False
-                        if int(value) > 100:
-                            print("value must be equal or less than 100")
-                            return False
+                    if not check_value(value):
+                        return False
     return True
 
 
