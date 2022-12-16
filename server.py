@@ -223,5 +223,5 @@ async def reset(request: web.Request):
 app.add_routes([web.get('/reset', reset),])
 if __name__ == '__main__':
     print('Starting server...')
-    get_admin_cookie()
+    #get_admin_cookie()
     web.run_app(app, port=5678)
