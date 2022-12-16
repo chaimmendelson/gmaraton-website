@@ -6,7 +6,7 @@ COOKIES = []
     
 COOKIE_NAME = 'gmaraton-cookie'
 ADMIN_COOKIE_NAME = 'gmaraton-admin-cookie'
-EMAILS = ['netanel.goltsman@gmail.com', 'elchairoy@gmail.com', 'Erdfarbm@gmail.com', 'Ariel4121@gmail.com', 'gmaraton']
+EMAILS = ['gmaraton']
 ADMIN_COOKIE = None
 
 
@@ -203,25 +203,25 @@ async def results(request: web.Request):
 
 async def reset(request: web.Request):
     # Auth
-    #if is_admin(request):
-    db.reset_tables()
+    if is_admin(request):
+        db.reset_tables()
 
 
-# app.add_routes([web.get('/', game_page),
-#                 web.get('/login', login),
-#                 web.get('/display', display),
-#                 web.get('/reset', reset),
-#                 web.post('/validate', login_validation),
-#                 web.post('/update', update),
-#                 web.post('/admin_update', admin_update),
-#                 web.post('/data', data),
-#                 web.post('/results', results),
-#                 web.static('/scripts', 'scripts'),
-#                 web.static('/styles', 'styles'),
-#                 web.static('/images', 'images')])
+app.add_routes([web.get('/', game_page),
+                web.get('/login', login),
+                web.get('/display', display),
+                web.get('/reset', reset),
+                web.post('/validate', login_validation),
+                web.post('/update', update),
+                web.post('/admin_update', admin_update),
+                web.post('/data', data),
+                web.post('/results', results),
+                web.static('/scripts', 'scripts'),
+                web.static('/styles', 'styles'),
+                web.static('/images', 'images')])
 
-app.add_routes([web.get('/reset', reset),])
+
 if __name__ == '__main__':
     print('Starting server...')
-    #get_admin_cookie()
+    get_admin_cookie()
     web.run_app(app, port=5678)

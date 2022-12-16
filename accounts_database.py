@@ -2,15 +2,12 @@ import psycopg2 as pg2
 from psycopg2 import extensions as pg2es
 import json
 import get_students
-from platform import uname
 
 
-if uname().system == 'Windows':
-        DB_CONN = pg2.connect(database='gmaraton', user='postgres', password=132005)
-else:
-    connect_str = "dbname='chess_users' user='lasker' host='localhost' password='132005'"
-    DB_CONN = pg2.connect(connect_str)
-DB_CONN.autocommit = True
+#create the connection
+# DB_CONN = pg2.connect()
+DB_CONN = None
+
 
 NINE = 'nine'
 TEN = 'ten'
@@ -156,9 +153,9 @@ def drop_tables()->None:
 
 def reset_tables()->None:
     drop_tables()
-    # create_tables()
-    # load_database()
-    # set_additional_grading()
+    create_tables()
+    load_database()
+    set_additional_grading()
 
 
 def insert_new_user(table, class_num, name):
