@@ -204,7 +204,7 @@ async def results(request: web.Request):
 async def reset(request: web.Request):
     # Auth
     if is_admin(request):
-        db.reset_competition()
+        db.reset_tables()
 
 
 app.add_routes([web.get('/', game_page),
